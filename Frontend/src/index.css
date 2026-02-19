@@ -1,0 +1,162 @@
+/* Google Fonts - IBM Plex (must be first) */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* ============================================
+   CLOUDCRYPT DESIGN SYSTEM
+   IBM Carbon Inspired - Subdued & Professional
+   ============================================ */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ============================================ */
+:root {
+  /* Background Colors */
+  --bg-primary: #161616;
+  --bg-secondary: #1e1e1e;
+  --bg-elevated: #262626;
+  --bg-hover: #2c2c2c;
+  --bg-active: #353535;
+
+  /* Border Colors */
+  --border-subtle: #393939;
+  --border-strong: #525252;
+  --border-interactive: #4589ff;
+
+  /* Accent Colors */
+  --accent-primary: #4589ff;
+  --accent-primary-hover: #6ea6ff;
+  --accent-secondary: #6f6f6f;
+  --accent-success: #42be65;
+  --accent-warning: #f1c21b;
+  --accent-danger: #da1e28;
+  --accent-danger-hover: #fa4d56;
+  --accent-purple: #a78bfa;
+  --accent-pink: #f472b6;
+  --accent-orange: #fb923c;
+
+  /* Text Colors */
+  --text-primary: #f4f4f4;
+  --text-secondary: #c6c6c6;
+  --text-muted: #8d8d8d;
+  --text-placeholder: #6f6f6f;
+  --text-inverse: #161616;
+  --text-on-color: #ffffff;
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Typography */
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Consolas', monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+
+  /* Transitions */
+  --transition-fast: 100ms ease;
+  --transition-normal: 150ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   TYPOGRAPHY UTILITIES
+   ============================================ */
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* ============================================
+   FOCUS STATES (Accessibility)
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+::selection {
+  background: var(--accent-primary);
+  color: var(--text-on-color);
+}
