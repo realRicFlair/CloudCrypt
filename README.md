@@ -10,9 +10,9 @@
 
 ## Overview
 
-CloudCrypt is built for people who want the convenience of services like Google Drive or Dropbox while maintaining complete ownership of their infrastructure and data. It is especially suited for personal servers, family storage hubs, and small trusted groups.
+CloudCrypt is built for people who want the convenience of services like Google Drive or Dropbox, while maintaining complete ownership of their infrastructure and data. It is especially suited for personal servers, family storage, and small trusted groups.
 
-Unlike traditional self-hosted file servers, CloudCrypt is designed with a **zero-trust security model**, meaning files can be encrypted in a way that ensures only the intended user can access their contents—even the server host cannot read them.
+Unlike traditional self-hosted file servers, CloudCrypt is designed with a **zero-trust security model**, meaning files can be encrypted in a way that ensures only the intended user can access their contents.
 
 This makes it ideal for scenarios where you want to provide storage for others while guaranteeing their privacy cryptographically, not just by policy.
 
@@ -30,7 +30,7 @@ This makes it ideal for scenarios where you want to provide storage for others w
   Stored files map directly to the server’s filesystem for simplicity and transparency.
 
 -  **Lightweight & Self-Hostable**  
-  Designed to run efficiently on spare PCs, home servers, or low-power machines.
+  Designed to run efficiently on spare PCs, rasberry pi's, or low-power machines.
 
 -  **Simple Web Interface**  
   Browse, upload, and manage files with an intuitive UI.
@@ -39,7 +39,8 @@ This makes it ideal for scenarios where you want to provide storage for others w
 
 ## Why CloudCrypt?
 
-Many self-hosted storage tools assume the server operator is fully trusted. CloudCrypt instead assumes **infrastructure should not automatically imply access**. By separating storage from decryption capability, it allows hosts to provide storage services without needing access to user data.
+Many self-hosted storage tools assume the server operator is fully trusted. CloudCrypt instead assumes **infrastructure should not automatically imply access**. 
+By separating storage from decryption capability, it allows hosts to provide storage services without needing access to user data.
 
 This approach benefits:
 
@@ -52,6 +53,9 @@ This approach benefits:
 
 ## Upcoming Features
 
+-  **Easier Dockerized Deployment**  
+  Deployment currently has little documentation and would probably benefit from ready made docker images. 
+  
 -  **File Tags & Smart Organization**  
   Optional tagging system for easier file management.
 
@@ -67,9 +71,9 @@ This approach benefits:
 
 CloudCrypt is built around three principles:
 
-1. **Ownership** — Your hardware, your data, your rules.  
-2. **Privacy** — Encryption should be enforced by design, not by trust.  
-3. **Simplicity** — Powerful storage shouldn’t require enterprise infrastructure.
+1. **Ownership** Your hardware, your data, your rules.  
+2. **Privacy** Encryption should be enforced by design, not by trust.  
+3. **Simplicity** Powerful storage shouldn’t require enterprise infrastructure.
 
 ---
 
@@ -78,7 +82,3 @@ CloudCrypt is built around three principles:
 CloudCrypt is actively in development. Features and APIs may evolve as the project matures.
 
 ---
-
----
-
-> Cloud storage, without surrendering control.
