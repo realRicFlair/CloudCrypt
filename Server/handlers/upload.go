@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"CloudCrypt/auth"
+	"CloudCrypt/config"
 	"CloudCrypt/internal/usagetracker"
 	"CloudCrypt/storage"
 	"log"
@@ -44,7 +45,7 @@ func UploadHandler(c *gin.Context) {
 	}
 
 	// Open uploaded file as an io.Reader
-	// Gin sohuld stores large files on disk temp
+	// Gin should stores large files on disk temp
 	src, err := fh.Open()
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Error opening upload: %v", err)
@@ -53,11 +54,7 @@ func UploadHandler(c *gin.Context) {
 	defer src.Close()
 
 	// Build a sane destination path (NO leading slash) and ensure directory exists
-	baseDir, err := os.Getwd()
-	if err != nil {
-		c.String(http.StatusInternalServerError, "cwd error: %v", err)
-		return
-	}
+	baseDir := config.Cfg.BaseDir
 	dstPath, err := storage.ResolveForCreate(mkey, baseDir, user.UserID, filepath.Clean(logicalPath))
 	if err := os.MkdirAll(filepath.Dir(dstPath), 0755); err != nil {
 		c.String(http.StatusInternalServerError, "mkdir: %v", err)

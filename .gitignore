@@ -33,3 +33,7 @@ Server/testfile.txt
 # Backend - Uploaded Content & Storage
 Server/filestorage/*
 Server/avatars/*
+
+# Docker / Environment
+.env
+data/

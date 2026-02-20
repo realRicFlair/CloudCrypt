@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"CloudCrypt/auth"
+	"CloudCrypt/config"
 	"CloudCrypt/db"
 	"CloudCrypt/internal/share"
 	"CloudCrypt/storage"
@@ -54,7 +55,7 @@ func CreateShareHandler(context *gin.Context) {
 		return
 	}
 
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 	shareID, err := share.ShareFile(db.DB, mkey, baseDir, userID, req.Path, req.IsFolder, req.Password, req.DirectDownload)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -77,7 +78,7 @@ func DeleteShareHandler(context *gin.Context) {
 	}
 
 	shareID := context.Param("id")
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 
 	userID, err := strconv.Atoi(user.UserID)
 	if err != nil {
@@ -131,7 +132,7 @@ func DownloadShareHandler(context *gin.Context) {
 		}
 	}
 
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 	userIDStr := strconv.Itoa(info.UserID)
 	filePath := filepath.Join(baseDir, "filestorage", "share_files", userIDStr, info.StoredFilename)
 

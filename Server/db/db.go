@@ -1,6 +1,7 @@
 package db
 
 import (
+	"CloudCrypt/config"
 	"database/sql"
 	"log"
 
@@ -12,7 +13,7 @@ var DB *sql.DB
 func InitDB() {
 	var err error
 	// Open SQLite database
-	DB, err = sql.Open("sqlite3", "./cloudcrypt.db")
+	DB, err = sql.Open("sqlite3", config.Cfg.DBPath)
 	if err != nil {
 		log.Fatal(err)
 	}

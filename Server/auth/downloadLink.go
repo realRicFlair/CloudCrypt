@@ -1,13 +1,13 @@
 package auth
 
 import (
+	"CloudCrypt/config"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -48,7 +48,7 @@ func GenerateDownloadLink(c *gin.Context) {
 
 func SignDownload(filepath string, userID string, exp time.Time) string {
 	println("SignDownload: ", filepath, userID, exp.Unix())
-	secret := []byte(os.Getenv("FILEMASTERKEY"))
+	secret := config.Cfg.FileKey
 	message := fmt.Sprintf("%s|%s|%d", filepath, userID, exp.Unix())
 	mac := hmac.New(sha256.New, secret)
 	mac.Write([]byte(message))

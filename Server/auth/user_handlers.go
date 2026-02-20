@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"CloudCrypt/config"
 	"CloudCrypt/db"
 	"database/sql"
 	"fmt"
@@ -87,7 +88,7 @@ func UpdateProfileHandler(c *gin.Context) {
 }
 
 // UploadAvatarHandler handles uploading a profile picture
-// Saves to assets/avatars/{userID}{ext}
+// Saves to avatars/{userID}{ext}
 func UploadAvatarHandler(c *gin.Context) {
 	sessionToken, err := c.Cookie("session_token")
 	if err != nil {
@@ -107,8 +108,7 @@ func UploadAvatarHandler(c *gin.Context) {
 	}
 
 	// Ensure directory exists
-	// Ensure directory exists
-	avatarDir := "./avatars"
+	avatarDir := filepath.Join(config.Cfg.BaseDir, "avatars")
 	if err := os.MkdirAll(avatarDir, 0755); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server filesystem error"})
 		return

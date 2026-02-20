@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"CloudCrypt/auth"
+	"CloudCrypt/config"
 	"CloudCrypt/internal/usagetracker"
 	"CloudCrypt/storage"
 	"io"
@@ -81,11 +82,7 @@ func ChunkedUploadHandler(context *gin.Context) {
 			return
 		}
 
-		baseDir, err := os.Getwd()
-		if err != nil {
-			context.String(http.StatusInternalServerError, "cwd error: %v", err)
-			return
-		}
+		baseDir := config.Cfg.BaseDir
 
 		done, assembledTo, err := storage.IngestChunkStateless(mkey, baseDir, user.UserID, storage.ChunkMeta{
 			LogicalPath: filepath.Clean(path),
@@ -132,11 +129,7 @@ func ChunkedUploadHandler(context *gin.Context) {
 	}
 	defer src.Close()
 
-	baseDir, err := os.Getwd()
-	if err != nil {
-		context.String(http.StatusInternalServerError, "cwd error: %v", err)
-		return
-	}
+	baseDir := config.Cfg.BaseDir
 	dstPath, err := storage.ResolveForCreate(mkey, baseDir, user.UserID, filepath.Clean(logicalPath))
 	if err != nil {
 		context.String(http.StatusInternalServerError, "resolve: %v", err)

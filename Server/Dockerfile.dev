@@ -1,0 +1,17 @@
+# Development Dockerfile — used with docker-compose.dev.yml
+# Installs Air for hot-reloading Go code on source changes.
+
+FROM golang:1.24-alpine
+
+RUN apk add --no-cache gcc musl-dev
+
+# Install Air for live-reloading
+RUN go install github.com/air-verse/air@latest
+
+WORKDIR /app/src
+
+RUN mkdir -p /data/filestorage /data/avatars
+
+EXPOSE 8443
+
+CMD ["air", "-c", "/app/src/.air.toml"]

@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"CloudCrypt/auth"
+	"CloudCrypt/config"
 	"CloudCrypt/internal/usagetracker"
 	"CloudCrypt/storage"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
@@ -39,10 +39,10 @@ func DeleteHandler(context *gin.Context) {
 		return
 	}
 
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 	deletedBytes, deletedFiles, err := storage.DeleteEntry(mkey, baseDir, user.UserID, filepath.Clean(path))
 	if err != nil {
-		if os.IsNotExist(err) {
+		if err.Error() == "not found" {
 			context.String(http.StatusNotFound, "not found")
 			return
 		}
@@ -85,7 +85,7 @@ func RenameHandler(context *gin.Context) {
 		return
 	}
 
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 	if err := storage.RenameEntry(mkey, baseDir, user.UserID, filepath.Clean(req.OldPath), req.NewName); err != nil {
 		context.String(http.StatusInternalServerError, "rename error: %v", err)
 		return
@@ -119,7 +119,7 @@ func CreateFolderHandler(context *gin.Context) {
 		return
 	}
 
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 	if err := storage.CreateDirectory(mkey, baseDir, user.UserID, filepath.Clean(req.Path)); err != nil {
 		context.String(http.StatusInternalServerError, "create dir error: %v", err)
 		return
@@ -149,7 +149,7 @@ func ListHandler(context *gin.Context) {
 	if requestedPath == "" {
 		requestedPath = "." // default to root
 	}
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 
 	entries, err := storage.ListDir(mkey, baseDir, user.UserID, filepath.Clean(requestedPath))
 	if err != nil {
@@ -191,7 +191,7 @@ func CopyHandler(context *gin.Context) {
 		return
 	}
 
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 	if err := storage.CopyEntry(mkey, baseDir, user.UserID, req.OldPath, req.NewPath); err != nil {
 		context.String(http.StatusInternalServerError, "copy error: %v", err)
 		return
@@ -226,7 +226,7 @@ func MoveHandler(context *gin.Context) {
 		return
 	}
 
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 	if err := storage.MoveEntry(mkey, baseDir, user.UserID, req.OldPath, req.NewPath); err != nil {
 		context.String(http.StatusInternalServerError, "move error: %v", err)
 		return

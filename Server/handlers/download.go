@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"CloudCrypt/auth"
+	"CloudCrypt/config"
 	"CloudCrypt/storage"
 	"crypto/hmac"
 	"fmt"
@@ -101,8 +102,7 @@ func DownloadHandler(context *gin.Context) {
 		}
 	}
 
-	baseDir, _ := os.Getwd()
-	//filePath := filepath.Join(baseDir, "/filestorage/", filepath.Clean(requestedPath))
+	baseDir := config.Cfg.BaseDir
 	filePath, err := storage.ResolveForRead(mkey, baseDir, user.UserID, filepath.Clean(requestedPath))
 	if err != nil {
 		context.String(http.StatusNotFound, "File not found: %v", err)
@@ -175,7 +175,7 @@ func DownloadFolderHandler(context *gin.Context) {
 		}
 	}
 
-	baseDir, _ := os.Getwd()
+	baseDir := config.Cfg.BaseDir
 	// Download headers for zip
 	context.Header("Content-Type", "application/zip")
 	context.Header("Content-Disposition", fmt.Sprintf(`attachment; filename=%q`, filepath.Base(requestedPath)+".zip"))

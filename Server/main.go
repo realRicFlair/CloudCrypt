@@ -7,6 +7,8 @@ import (
 	"CloudCrypt/handlers"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -18,13 +20,18 @@ func checkError(err error) {
 }
 
 func main() {
-	db.InitDB()
-
-	router := gin.Default()
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		log.Printf("Error loading config: %v", err)
 	}
+
+	// Ensure data directories exist
+	os.MkdirAll(filepath.Join(cfg.BaseDir, "filestorage"), 0755)
+	os.MkdirAll(filepath.Join(cfg.BaseDir, "avatars"), 0755)
+
+	db.InitDB()
+
+	router := gin.Default()
 	router.Use(gin.Logger(), gin.Recovery())
 
 	router.GET("/health", func(context *gin.Context) {
@@ -91,8 +98,8 @@ func main() {
 		apiGroup.GET("/share/:id/download", handlers.DownloadShareHandler)
 		apiGroup.POST("/share/:id/download", handlers.DownloadShareHandler)
 
-		// Serve avatars (implement properly later)
-		apiGroup.Static("/avatars", "./avatars")
+		// Serve avatars
+		apiGroup.Static("/avatars", filepath.Join(cfg.BaseDir, "avatars"))
 
 		downloadGroup := apiGroup.Group("/dlink")
 		{

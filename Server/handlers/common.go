@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"CloudCrypt/auth"
+	"CloudCrypt/config"
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/hkdf"
@@ -13,7 +13,7 @@ import (
 
 // Helper to get the effective master key for the user
 func getUserMasterKey(context *gin.Context, user *auth.User) ([]byte, error) {
-	globalMasterKey := []byte(os.Getenv("FILEMASTERKEY"))
+	globalMasterKey := config.Cfg.FileKey
 	var userKeyPart string
 
 	if user.KeyStored {
