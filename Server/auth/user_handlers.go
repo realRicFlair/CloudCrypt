@@ -173,7 +173,8 @@ func SwapKeyModeHandler(c *gin.Context) {
 		return
 	}
 
-	if req.Mode == "server" {
+	switch req.Mode {
+	case "server":
 		// User wants Server Managed.
 		// User MUST currently be User Managed (KeyStored = false), so they are sending X-Encryption-Key header.
 		// We take that key and store it.
@@ -196,7 +197,7 @@ func SwapKeyModeHandler(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "Switched to Server Managed"})
 
-	} else if req.Mode == "user" {
+	case "user":
 		// User wants User Managed.
 		// We retrieve the stored key, return it, and set KeyStored = 0.
 
@@ -227,7 +228,7 @@ func SwapKeyModeHandler(c *gin.Context) {
 
 		c.JSON(http.StatusOK, gin.H{"message": "Switched to User Managed", "key": storedKey.String})
 
-	} else {
+	default:
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid mode"})
 	}
 }

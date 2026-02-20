@@ -5,11 +5,12 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
 	"os"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GenerateDownloadLink(c *gin.Context) {
@@ -20,7 +21,7 @@ func GenerateDownloadLink(c *gin.Context) {
 	// authGroup := apiGroup.Group("/auth")
 	// authGroup has NO middleware.
 	// So we need to validate session here.
-	
+
 	user, _, err := GetUserFromSession(sessionToken)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -47,7 +48,7 @@ func GenerateDownloadLink(c *gin.Context) {
 
 func SignDownload(filepath string, userID string, exp time.Time) string {
 	println("SignDownload: ", filepath, userID, exp.Unix())
-	secret := []byte(os.Getenv("SIGN_SECRET"))
+	secret := []byte(os.Getenv("FILEMASTERKEY"))
 	message := fmt.Sprintf("%s|%s|%d", filepath, userID, exp.Unix())
 	mac := hmac.New(sha256.New, secret)
 	mac.Write([]byte(message))
