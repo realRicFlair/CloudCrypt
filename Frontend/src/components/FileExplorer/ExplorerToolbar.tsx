@@ -1,4 +1,4 @@
-import { ArrowUp, FolderPlus, HomeIcon, RefreshCcw, Download, Copy, Trash2, ClipboardPaste } from "lucide-react";
+import { ArrowUp, FolderPlus, HomeIcon, RefreshCcw, Download, Trash2, ClipboardPaste } from "lucide-react";
 import { IconButton, Panel } from "../ui";
 
 interface ExplorerToolbarProps {
@@ -24,7 +24,6 @@ export function ExplorerToolbar({
     onCreateFolder,
     onNavigateUp,
     onDownload,
-    onCopy,
     onDelete,
     onPaste
 }: ExplorerToolbarProps) {

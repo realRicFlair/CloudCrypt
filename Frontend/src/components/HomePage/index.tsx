@@ -1,4 +1,4 @@
-import { Folder, Upload, Clock, HardDrive, Shield, Settings, Share2Icon, Users2Icon } from "lucide-react";
+import { Folder, Upload, HardDrive, Shield, Settings, Users2Icon } from "lucide-react";
 import { useNavigate } from "react-router";
 import { QuickAction } from "./QuickAction";
 import { StatusPanel } from "./StatusPanel";
@@ -13,7 +13,7 @@ export default function HomePage() {
     const { totalBytes, fileCount, fetchUsage } = useUsageStore();
     const STORAGE_LIMIT = 50 * 1024 * 1024 * 1024; // 50 GB
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [_, setSearchParams] = useSearchParams();
 
     const openModal = (modal: string) => {
         setSearchParams(prev => {
