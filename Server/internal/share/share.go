@@ -4,6 +4,7 @@ import (
 	"CloudCrypt/internal/encryption"
 	"CloudCrypt/storage"
 	"database/sql"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -24,25 +25,49 @@ type SharedFile struct {
 	CreatedAt        string
 }
 
+func doesShareIDExistAlready(baseDir string, shareID string) bool {
+	shareDir := filepath.Join(baseDir, "filestorage", "share_files", shareID)
+	_, err := os.Stat(shareDir)
+	if err == nil {
+		return true
+	}
+	return false
+}
+
 // ShareFile creates a shared copy of the file or folder.
 func ShareFile(db *sql.DB, masterKey []byte, baseDir string, userID int, logicalPath string, isFolder bool, password string, directDownload bool) (string, error) {
-	// 1. Generate Link ID
-	shareID, err := encryption.GenerateSlug(16) // 32 hex chars
-	if err != nil {
-		return "", err
-	}
-
+	var err error
 	userIDStr := strconv.Itoa(userID)
 	shareDir := filepath.Join(baseDir, "filestorage", "share_files", userIDStr)
-	if err := os.MkdirAll(shareDir, 0755); err != nil {
+	if err = os.MkdirAll(shareDir, 0755); err != nil {
 		return "", err
 	}
 
-	destFilename := shareID
-	var originalName string
-	_, originalName = filepath.Split(logicalPath)
+	// 1. Generate Link ID, retry a few times if shareid already exists
+	var shareID string
+	const maxAttempts = 5
+	for i := 0; i < maxAttempts; i++ {
+		shareID, err = encryption.GenerateSlug(16)
+		if err != nil {
+			return "", err
+		}
 
-	destPath := filepath.Join(shareDir, destFilename)
+		if !doesShareIDExistAlready(shareDir, shareID) {
+			break
+		}
+
+		if i == maxAttempts-1 {
+			return "", errors.New("failed to generate unique ShareID")
+		}
+		fmt.Print("ShareID already exists for user:", userID, ". Commencing attempt ", i)
+	}
+
+	physicalFilename := shareID
+
+	var logicalFilename string
+	_, logicalFilename = filepath.Split(logicalPath)
+
+	destPath := filepath.Join(shareDir, physicalFilename)
 	if isFolder {
 		destPath += ".zip"
 	} else {
@@ -113,7 +138,7 @@ func ShareFile(db *sql.DB, masterKey []byte, baseDir string, userID int, logical
 	) VALUES (?, ?, ?, ?, ?, ?, ?)`
 
 	storedFilename := filepath.Base(destPath)
-	_, err = db.Exec(stmt, userID, shareID, originalName, storedFilename, isEncrypted, isFolder, directDownload)
+	_, err = db.Exec(stmt, userID, shareID, logicalFilename, storedFilename, isEncrypted, isFolder, directDownload)
 	if err != nil {
 		os.Remove(destPath)
 		return "", err

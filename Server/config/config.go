@@ -33,7 +33,7 @@ func LoadConfig() (*Config, error) {
 		cfg.Port = v
 	}
 	//env for filekey
-	if v := os.Getenv("fileKey"); v != "" {
+	if v := os.Getenv("FILEMASTERKEY"); v != "" {
 		cfg.FileKey = []byte(v)
 	}
 
