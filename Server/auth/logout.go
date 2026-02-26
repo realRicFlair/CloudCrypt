@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"CloudCrypt/config"
 	"CloudCrypt/db"
 	"net/http"
 
@@ -29,13 +30,9 @@ func LogoutHandler(context *gin.Context) {
 }
 
 func clearCookies(context *gin.Context) {
-	// Clear cookies for rorocorp.org domain
-	context.SetCookie("session_token", "", -1, "/", "rorocorp.org", false, true)
-	context.SetCookie("csrf_token", "", -1, "/", "rorocorp.org", false, false)
-
-	// Clear cookies for localhost domain
-	context.SetCookie("session_token", "", -1, "/", "localhost", false, true)
-	context.SetCookie("csrf_token", "", -1, "/", "localhost", false, false)
+	// Clear cookies for domain
+	context.SetCookie("session_token", "", -1, "/", config.Conf.API_URL, false, true)
+	context.SetCookie("csrf_token", "", -1, "/", config.Conf.API_URL, false, false)
 
 	// Clear cookies without domain (covers edge cases)
 	context.SetCookie("session_token", "", -1, "/", "", false, true)
