@@ -2,7 +2,7 @@
 
 **CloudCrypt** is a self-hosted, privacy-focused cloud storage platform designed for homelabs and personal servers. It provides a clean web interface, secure file storage, and client-side encryption so users retain full control over their data.
 
-**Sample Instance:** (https://sc.rorocorp.org)  
+**Sample Instance:** (https://cloudcrypt.ca)  
 
 ![CloudCrypt Screenshot](https://github.com/user-attachments/assets/6f4da57d-7706-4c62-9a71-235928754ffd)
 
