@@ -39,7 +39,7 @@ func main() {
 
 	// router stuff
 	router := gin.Default()
-	cfg, err := config.LoadConfig()
+	err := config.LoadConfig()
 	if err != nil {
 		log.Printf("Error loading config: %v", err)
 	}
@@ -51,13 +51,13 @@ func main() {
 	})
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     cfg.AllowedOrigins,
+		AllowOrigins:     config.Conf.AllowedOrigins,
 		AllowMethods:     []string{http.MethodGet, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodHead, http.MethodDelete, http.MethodOptions},
 		AllowHeaders:     []string{"Origin", "Content-Type", "X-XSRF-TOKEN", "X-CSRF-TOKEN", "Accept", "Origin", "X-Requested-With", "Authorization", "X-Encryption-Key"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
-			return origin == "cloudcrypt.ca"
+			return origin == config.Conf.API_URL
 		},
 		MaxAge: 12 * time.Hour,
 	}))
@@ -145,7 +145,7 @@ func main() {
 
 	//router.MaxMultipartMemory = 4 << 30
 	//err = router.RunTLS("10.8.0.2:8443", os.Getenv("SSLPUBLIC"), os.Getenv("SSLPRIVATE"))
-	err = router.Run("0.0.0.0:" + cfg.Port)
+	err = router.Run("0.0.0.0:" + config.Conf.Port)
 	if err != nil {
 		log.Printf("server error: %v", err)
 		panic(err)

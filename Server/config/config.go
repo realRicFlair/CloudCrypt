@@ -7,39 +7,45 @@ import (
 
 type Config struct {
 	BaseDir        string
-	FileKey        []byte
+	FILEMASTERKEY  []byte
 	Port           string
 	AllowedOrigins []string
-}
-type configInterface interface {
-	LoadConfig() (*Config, error)
+	API_URL        string
 }
 
-func LoadConfig() (*Config, error) {
+var Conf *Config
+
+func LoadConfig() error {
 	var err error
-	cfg := &Config{
+
+	Conf = &Config{
 		BaseDir:        "./",
-		FileKey:        []byte("secret"),
+		FILEMASTERKEY:  []byte("secret"),
 		Port:           "8080",
 		AllowedOrigins: []string{"http://localhost:5173"},
+		API_URL:        "localhost",
 	}
 
-	cfg.BaseDir, err = os.Getwd()
+	Conf.BaseDir, err = os.Getwd()
 	if err != nil {
-		cfg.BaseDir = "./"
+		Conf.BaseDir = "./"
 	}
 
 	if v := os.Getenv("PORT"); v != "" {
-		cfg.Port = v
+		Conf.Port = v
 	}
-	//env for filekey
+
 	if v := os.Getenv("FILEMASTERKEY"); v != "" {
-		cfg.FileKey = []byte(v)
+		Conf.FILEMASTERKEY = []byte(v)
 	}
 
 	if v := os.Getenv("CORS_ALLOWED_ORIGINS"); v != "" {
-		cfg.AllowedOrigins = strings.Split(v, ",")
+		Conf.AllowedOrigins = strings.Split(v, ",")
 	}
 
-	return cfg, nil
+	if v := os.Getenv("API_URL"); v != "" {
+		Conf.API_URL = v
+	}
+
+	return nil
 }

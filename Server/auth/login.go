@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"CloudCrypt/config"
 	"CloudCrypt/db"
 	"database/sql"
 	"fmt"
@@ -127,11 +128,8 @@ func LoginHandler(context *gin.Context) {
 	csrfToken := generateToken(32)
 	expiryTime := time.Now().Add(24 * time.Hour)
 
-	context.SetCookie("session_token", sessionToken, 3600, "/", "rorocorp.org", false, true)
-	context.SetCookie("csrf_token", csrfToken, 3600, "/", "rorocorp.org", false, false)
-
-	context.SetCookie("session_token", sessionToken, 3600, "/", "localhost", false, true)
-	context.SetCookie("csrf_token", csrfToken, 3600, "/", "localhost", false, false)
+	context.SetCookie("session_token", sessionToken, 3600, "/", config.Conf.API_URL, false, true)
+	context.SetCookie("csrf_token", csrfToken, 3600, "/", config.Conf.API_URL, false, false)
 
 	_, err = db.DB.Exec("INSERT INTO sessions (session_token, user_id, csrf_token, expiry_time) VALUES (?, ?, ?, ?)",
 		sessionToken, id, csrfToken, expiryTime)
