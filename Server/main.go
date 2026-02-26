@@ -5,12 +5,15 @@ import (
 	"CloudCrypt/config"
 	"CloudCrypt/db"
 	"CloudCrypt/handlers"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func checkError(err error) {
@@ -20,6 +23,21 @@ func checkError(err error) {
 func main() {
 	db.InitDB()
 
+	// Log Handling
+	lj := &lumberjack.Logger{
+		Filename:   "logs/server.log", // base file
+		MaxSize:    50,                // MB (rotate when it grows past this)
+		MaxBackups: 14,                // keep 14 old files
+		MaxAge:     365,               // days
+		Compress:   true,              // gzip old logs
+		// LocalTime: true,            // optional (uses local time in timestamps)
+	}
+	// Write to both terminal and rotating file
+	logwriter := io.MultiWriter(os.Stdout, lj)
+	gin.DefaultWriter = logwriter
+	gin.DefaultErrorWriter = logwriter
+
+	// router stuff
 	router := gin.Default()
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -27,6 +45,7 @@ func main() {
 	}
 	router.Use(gin.Logger(), gin.Recovery())
 
+	// Simple health check just for my proxy
 	router.GET("/health", func(context *gin.Context) {
 		context.String(http.StatusOK, "OK")
 	})
